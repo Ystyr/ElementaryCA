@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: CAOutMat
-  m_Shader: {fileID: 4800000, guid: 047d7d93f97b4a540bddd9006badbf8c, type: 3}
+  m_Shader: {fileID: 4800000, guid: 7123f397ccacd2d4e98c41664328cc23, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
