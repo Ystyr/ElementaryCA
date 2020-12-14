@@ -106,7 +106,7 @@ public class ElementaryCA : MonoBehaviour
         var nextState = 0ul;
         var currentState = history[history.Count - 1];
         for (byte i = 1; i < longBitsNum - 1; i++) {
-            ///!@ switch neigbours bits according to the rule
+            ///!@ switch bit based on neighbours states according to the rule
             byte neigbhd = 0;
             for (sbyte b = -1; b <= 1; b++) {
                 if (BitUtils.GetULongBit(currentState, i + b))
