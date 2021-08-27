@@ -95,6 +95,7 @@ public class ElementaryCA : MonoBehaviour
         UpdateRule();
         history = new List<ulong>();
         history.Add(initConfig);
+        
         StartCoroutine(PlayRulesPull());
     }
 
@@ -106,12 +107,13 @@ public class ElementaryCA : MonoBehaviour
         var nextState = 0ul;
         var currentState = history[history.Count - 1];
         for (byte i = 1; i < longBitsNum - 1; i++) {
-            ///!@ switch bit based on neighbours states according to the rule
             byte neigbhd = 0;
+            ///!@ set 3 bits representing the number of a bit in the rule
             for (sbyte b = -1; b <= 1; b++) {
                 if (BitUtils.GetULongBit(currentState, i + b))
                     neigbhd |= (byte)(1 << b + 1);
             }
+            ///!@ set i-th bit of the next state
             if (BitUtils.GetShortBit(rule, neigbhd))  
                 nextState |= 1ul << i;
         }
