@@ -27,9 +27,8 @@ public class ElementaryCA : MonoBehaviour
     [SerializeField]
     byte[] rulesPool;
 
-    [Tooltip("Play each of 256 ECA rules (ignoring rules pool)")]
     [SerializeField]
-    bool playAll;
+    PlayMode playMode;
 
     [Tooltip("Clear and start over (works at editor time)")]
     [SerializeField]
@@ -47,6 +46,11 @@ public class ElementaryCA : MonoBehaviour
     [SerializeField]
     float updateRate = .1f;
     #pragma warning restore 0649
+
+    [Serializable]
+    public enum PlayMode { 
+        PlaySingle, PlayAll, PlayPool 
+    }
 
     public const int longBitsNum = 64;
 
@@ -71,6 +75,7 @@ public class ElementaryCA : MonoBehaviour
             restart = false;
             history = null;
             refresh = true;
+            Start();
         }
         if (refresh) {        
             if (history == null) {
@@ -91,12 +96,12 @@ public class ElementaryCA : MonoBehaviour
     }
 
 
-    private void Start () {
-        UpdateRule();
+    private void Start () 
+    {
         history = new List<ulong>();
         history.Add(initConfig);
         
-        StartCoroutine(PlayRulesPull());
+        StartCoroutine(Play());
     }
 
     /// <summary>
@@ -146,24 +151,30 @@ public class ElementaryCA : MonoBehaviour
         Debug.Log("rule bits: " + output);
     }
 
-
     private void UpdateRule() {
-        rule = playAll ? ++rule : rulesPool[currentRule++];
-        Debug.Log("Rule #:" + rule);
-        LogRuleBits();
+        switch (playMode)
+        {
+            case PlayMode.PlayAll:
+                rule++;
+                break;
+            case PlayMode.PlayPool:
+                rule = rulesPool[currentRule++];
+                break;
+        }
     }
 
-
-    private IEnumerator PlayRulesPull ()
+    private IEnumerator Play ()
     {
         yield return new WaitForSeconds(updateRate);
         if (history.Count == maxHistLen - 1) {
+            if (playMode == PlayMode.PlaySingle)
+                yield break;
             history = new List<ulong>();
             history.Add(initConfig);
             UpdateRule();
         }
         UpdateCA();
         RefreshVisualizer();
-        StartCoroutine(PlayRulesPull());
+        StartCoroutine(Play());
     }
 }
